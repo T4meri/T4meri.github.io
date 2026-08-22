@@ -1,0 +1,184 @@
+/* Spark — clean, slightly rough around the edges on purpose.
+   Dark red (#9c2f2f) + light gray / off-white text on very dark background.
+   Goal: looks like a real product site, not AI-generated marketing.
+   NO rounded rectangles anywhere.
+*/
+
+:root {
+  --red: #9c2f2f;
+  --red-dark: #7f2727;
+  --bg: #0f0f0f;
+  --bg-elev: #181818;
+  --bg-elev2: #141414;
+  --border: #222;
+  --text: #e8e8e8;
+  --text-muted: #a3a3a3;
+  --text-faint: #666;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.display {
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Navigation */
+nav {
+  background: rgba(15, 15, 15, 0.95);
+  backdrop-filter: blur(12px);
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--red);
+  color: white;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background-color: var(--red-dark);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid #333;
+  font-weight: 500;
+}
+
+.btn-secondary:hover {
+  background-color: #222;
+  border-color: #444;
+}
+
+/* Cards */
+.card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+}
+
+.card:hover {
+  border-color: #2a2a2a;
+}
+
+/* Tables */
+.benchmark-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.benchmark-table th,
+.benchmark-table td {
+  padding: 6px 8px;
+}
+
+.benchmark-table tr {
+  border-bottom: 1px solid var(--border);
+}
+
+.benchmark-table tbody tr:hover {
+  background: #181818;
+}
+
+/* Chat */
+.chat-container {
+  scrollbar-width: thin;
+  scrollbar-color: #333 #111;
+}
+
+.chat-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+  background: #333;
+}
+
+.message {
+  max-width: 78%;
+  padding: 8px 11px;
+  line-height: 1.35;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+}
+
+.user-msg {
+  background-color: var(--red);
+  color: white;
+}
+
+.bot-msg {
+  background-color: #1f1f1f;
+  border: 1px solid #2a2a2a;
+}
+
+/* Misc */
+.section-header {
+  font-size: 1.65rem;
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.nav-link {
+  color: var(--text-muted);
+  transition: color 0.1s ease;
+}
+
+.nav-link:hover {
+  color: var(--text);
+}
+
+.subtle-grid {
+  background-image: 
+    linear-gradient(rgba(156, 47, 47, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(156, 47, 47, 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Utility */
+.accent {
+  color: var(--red);
+}
+
+/* Make sure the demo input feels solid */
+#chat-input:focus {
+  border-color: #444;
+  background: #1a1a1a;
+}
+
+/* Small polish for the benchmark highlight row */
+.benchmark-table tbody tr:first-child {
+  background: #181818;
+}
+
+/* Footer links */
+footer a {
+  color: #555;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #888;
+}
+
+/* Modal */
+#login-modal {
+  animation: fadeIn 0.1s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

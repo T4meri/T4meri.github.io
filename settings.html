@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — Spark</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c23b3b' d='M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="settings.css">
+</head>
+<body class="settings-body">
+  <header class="settings-top">
+    <a class="brand" href="app.html">
+      <svg class="mark" width="17" height="17" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z"/>
+      </svg>
+      <span class="brand-name">Spark</span>
+    </a>
+    <a class="back-link" href="app.html">Back to chat</a>
+  </header>
+
+  <main class="settings-main">
+    <h1>Settings</h1>
+
+    <p class="notice" id="notice" hidden></p>
+    <p class="notice ok" id="success" hidden></p>
+
+    <section class="panel">
+      <h2>Account</h2>
+      <dl class="facts">
+        <dt>Email</dt><dd id="fact-email">—</dd>
+        <dt>Status</dt><dd id="fact-status">—</dd>
+        <dt>Member since</dt><dd id="fact-since">—</dd>
+        <dt>Messages today</dt><dd id="fact-usage">—</dd>
+      </dl>
+
+      <form id="profile-form">
+        <div class="field">
+          <label for="displayName">Display name</label>
+          <input type="text" id="displayName" maxlength="60" autocomplete="nickname">
+        </div>
+        <button class="submit compact" type="submit" id="profile-save">Save name</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Preferences</h2>
+
+      <label class="toggle">
+        <input type="checkbox" id="pref-autorun">
+        <span class="switch" aria-hidden="true"></span>
+        <span class="toggle-copy">
+          <strong>Run HTML automatically</strong>
+          <em>When Spark writes a page or game, open it in the preview pane straight away.</em>
+        </span>
+      </label>
+
+      <label class="toggle">
+        <input type="checkbox" id="pref-enter">
+        <span class="switch" aria-hidden="true"></span>
+        <span class="toggle-copy">
+          <strong>Send with Enter</strong>
+          <em>Off means Enter adds a line break and Ctrl+Enter sends.</em>
+        </span>
+      </label>
+    </section>
+
+    <section class="panel">
+      <h2>Password</h2>
+      <form id="password-form">
+        <div class="field">
+          <label for="currentPassword">Current password</label>
+          <input type="password" id="currentPassword" autocomplete="current-password" required>
+        </div>
+        <div class="field">
+          <label for="newPassword">New password</label>
+          <input type="password" id="newPassword" autocomplete="new-password" required>
+          <p class="hint">At least 8 characters. Changing this signs out every other device.</p>
+        </div>
+        <button class="submit compact" type="submit" id="password-save">Change password</button>
+      </form>
+    </section>
+
+    <section class="panel danger">
+      <h2>Danger zone</h2>
+
+      <div class="danger-row">
+        <div>
+          <strong>Delete every conversation</strong>
+          <em>Removes all chats and their messages. Your account stays.</em>
+        </div>
+        <button class="danger-btn" id="clear-chats" type="button">Delete chats</button>
+      </div>
+
+      <div class="danger-row">
+        <div>
+          <strong>Delete account</strong>
+          <em>Removes your account, chats, and messages. This cannot be undone.</em>
+        </div>
+        <button class="danger-btn" id="delete-account" type="button">Delete account</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+.settings-body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg-base);
+  color: var(--ink);
+}
+
+.settings-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-sidebar);
+}
+
+.settings-top .brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.settings-top .brand-name {
+  font-size: 1.06rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.back-link {
+  font-size: 0.82rem;
+  color: var(--ink-dim);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.back-link:hover { color: var(--ink); }
+
+.settings-main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 34px 20px 64px;
+}
+
+.settings-main h1 {
+  font-size: 1.7rem;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  margin: 0 0 22px;
+}
+
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  padding: 20px;
+  margin-bottom: 14px;
+}
+
+.panel h2 {
+  margin: 0 0 16px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 20px;
+  margin: 0 0 20px;
+  padding: 0 0 18px;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.85rem;
+}
+
+.facts dt { color: var(--ink-faint); }
+
+.facts dd {
+  margin: 0;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.verified { color: #7fd8a8; }
+.unverified { color: #e8a0a0; }
+
+.submit.compact {
+  width: auto;
+  min-width: 150px;
+  padding: 0 18px;
+}
+
+.toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 0;
+  cursor: pointer;
+  border-top: 1px solid var(--line);
+}
+
+.toggle:first-of-type { border-top: none; padding-top: 0; }
+
+.toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch {
+  flex: none;
+  width: 38px;
+  height: 21px;
+  margin-top: 2px;
+  position: relative;
+  background: var(--bg-raised);
+  border: 1px solid var(--line-strong);
+  transition: background 0.14s ease, border-color 0.14s ease;
+}
+
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 15px;
+  height: 15px;
+  background: var(--ink-faint);
+  transition: transform 0.14s ease, background 0.14s ease;
+}
+
+.toggle input:checked + .switch {
+  background: rgba(194, 59, 59, 0.22);
+  border-color: var(--brand);
+}
+
+.toggle input:checked + .switch::after {
+  transform: translateX(17px);
+  background: var(--brand-hot);
+}
+
+.toggle input:focus-visible + .switch {
+  outline: 2px solid var(--brand-hot);
+  outline-offset: 2px;
+}
+
+.toggle-copy { display: block; }
+
+.toggle strong {
+  display: block;
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.toggle em {
+  display: block;
+  margin-top: 3px;
+  font-style: normal;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--ink-faint);
+}
+
+.panel.danger { border-color: #3d1f1f; }
+
+.danger-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+
+.danger-row:first-of-type { border-top: none; padding-top: 0; }
+
+.danger-row strong {
+  display: block;
+  font-size: 0.86rem;
+  font-weight: 500;
+}
+
+.danger-row em {
+  display: block;
+  margin-top: 3px;
+  font-style: normal;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--ink-faint);
+}
+
+.danger-btn {
+  flex: none;
+  height: var(--control);
+  padding: 0 16px;
+  background: transparent;
+  border: 1px solid #5a2828;
+  color: #e8a0a0;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.13s ease, color 0.13s ease, border-color 0.13s ease;
+}
+
+.danger-btn:hover {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+.danger-btn.confirming {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+.notice.ok {
+  border-color: #24512f;
+  background: rgba(52, 211, 153, 0.08);
+  color: #8fdcb0;
+}
+
+@media (max-width: 560px) {
+  .danger-row { flex-direction: column; align-items: stretch; }
+  .danger-btn { width: 100%; }
+  .facts { grid-template-columns: 1fr; gap: 2px 0; }
+  .facts dd { margin-bottom: 8px; }
+}

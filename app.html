@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spark</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c23b3b' d='M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body class="app-body">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-spark" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z"/>
+      </symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" d="M12 5v14M5 12h14"/>
+      </symbol>
+      <symbol id="i-send" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" d="M12 20V5M5 12l7-7 7 7"/>
+      </symbol>
+      <symbol id="i-close" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M6 6l12 12M18 6L6 18"/>
+      </symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M4 7h16M4 12h16M4 17h16"/>
+      </symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square" d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13"/>
+      </symbol>
+      <symbol id="i-reload" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"
+              d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5"/>
+      </symbol>
+      <symbol id="i-expand" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"
+              d="M4 10V4h6M20 14v6h-6"/>
+      </symbol>
+      <symbol id="i-play" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M7 4l12 8-12 8z"/>
+      </symbol>
+      <symbol id="i-gear" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"
+              d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"
+              d="M19.4 15a1.6 1.6 0 0 0 .32 1.77l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.6 1.6 0 0 0-2.72 1.13V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.83 19.4l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.6 1.6 0 0 0 3 14.6a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7.83l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.6 1.6 0 0 0 10 3.1V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.72 1.13l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.6 1.6 0 0 0 20.9 10H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="scrim" id="scrim"></div>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-head">
+        <a class="brand" href="index.html">
+          <svg class="mark" width="17" height="17"><use href="#i-spark"/></svg>
+          <span class="brand-name">Spark</span>
+          <span class="brand-tag">1.4</span>
+        </a>
+        <button class="icon-btn rail-toggle" id="close-sidebar" aria-label="Close sidebar">
+          <svg width="16" height="16"><use href="#i-close"/></svg>
+        </button>
+      </div>
+
+      <button class="new-chat" id="new-chat">
+        <svg class="mark" width="13" height="13"><use href="#i-plus"/></svg>
+        New chat
+      </button>
+
+      <nav class="conversations scroll" id="conversations" aria-label="Conversations"></nav>
+
+      <div class="sidebar-foot">
+        <div class="account-badge" id="account-badge">—</div>
+        <div class="account">
+          <div class="account-name" id="account-name">—</div>
+          <div class="account-meta" id="account-meta"></div>
+        </div>
+        <a class="icon-btn" href="settings.html" title="Settings" aria-label="Settings">
+          <svg width="15" height="15"><use href="#i-gear"/></svg>
+        </a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn rail-toggle" id="open-sidebar" aria-label="Open sidebar">
+          <svg width="17" height="17"><use href="#i-menu"/></svg>
+        </button>
+        <div class="status">
+          <span class="dot"></span>
+          <span id="chat-title">Spark 1.4</span>
+        </div>
+        <div class="spacer"></div>
+        <div class="quota" id="quota"></div>
+      </header>
+
+      <section class="thread scroll" id="thread"></section>
+
+      <div class="composer-wrap">
+        <div class="composer">
+          <textarea id="composer" rows="1" placeholder="Message Spark…" autocomplete="off"></textarea>
+          <button id="send" class="send" aria-label="Send message">
+            <svg width="17" height="17"><use href="#i-send"/></svg>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <aside class="preview" id="preview" hidden>
+      <header class="preview-bar">
+        <div class="preview-tabs">
+          <button class="preview-tab" data-view="render" aria-selected="true" type="button">Preview</button>
+          <button class="preview-tab" data-view="code" aria-selected="false" type="button">Source</button>
+          <button class="preview-tab" data-view="console" aria-selected="false" type="button">
+            Console <span class="badge" id="console-badge" hidden>0</span>
+          </button>
+        </div>
+        <div class="preview-actions">
+          <button class="icon-btn" id="preview-reload" title="Reload" aria-label="Reload preview">
+            <svg width="15" height="15"><use href="#i-reload"/></svg>
+          </button>
+          <button class="icon-btn" id="preview-expand" title="Expand" aria-label="Expand preview">
+            <svg width="15" height="15"><use href="#i-expand"/></svg>
+          </button>
+          <button class="icon-btn" id="preview-close" title="Close" aria-label="Close preview">
+            <svg width="15" height="15"><use href="#i-close"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="preview-body">
+        <iframe id="preview-frame" title="Preview" sandbox="allow-scripts allow-modals allow-pointer-lock"></iframe>
+        <pre class="preview-code scroll" id="preview-code" hidden></pre>
+        <div class="preview-console scroll" id="preview-console" hidden></div>
+      </div>
+
+      <footer class="preview-errors" id="preview-errors" hidden>
+        <span class="preview-errors-text" id="preview-errors-text"></span>
+        <button class="fix-btn" id="preview-fix" type="button">Ask Spark to fix</button>
+        <button class="link-btn" id="preview-dismiss" type="button">Dismiss</button>
+      </footer>
+    </aside>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script src="markdown.js"></script>
+  <script src="preview.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -7,9 +7,9 @@
   <meta name="description" content="Use Spark from the terminal or any OpenAI-compatible client.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c23b3b' d='M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap">
-  <link rel="stylesheet" href="styles.css?v=c897ed9">
-  <link rel="stylesheet" href="theme.css?v=c897ed9">
-  <link rel="stylesheet" href="docs.css?v=c897ed9">
+  <link rel="stylesheet" href="styles.css?v=a21f8e6">
+  <link rel="stylesheet" href="theme.css?v=a21f8e6">
+  <link rel="stylesheet" href="docs.css?v=a21f8e6">
 </head>
 <body class="docs-body">
   <header class="settings-top">
@@ -143,6 +143,23 @@ spark chart "days in each month of 2026"
 spark "explain this stack trace" &lt; error.log
 spark do "find files over 100MB" --to-history</code></pre>
 
+      <h3>The interactive session</h3>
+      <p>
+        <code>spark chat</code> opens a session. Press <code>/</code> and the commands appear as
+        you type, narrowed with every letter, so there is nothing to memorise. Tab completes the
+        highlighted one, Enter runs it, Esc puts the menu away.
+      </p>
+      <pre><code>&rsaquo; /s
+  &rsaquo; /skills           What Spark can do, with examples worth stealing
+    /save &lt;file&gt;      Keep this conversation in a file you own
+    /serve            Open the last generated page in a browser
+    /search [on|off]  Whether answers may use the live web</code></pre>
+      <p>
+        <code>/skills</code> is the tour. Esc while an answer is streaming stops it and keeps
+        what had already arrived. Sessions are written to a thread file as you go, so
+        <code>/resume</code> offers the recent ones back.
+      </p>
+
       <p>
         Source and full documentation:
         <a href="https://github.com/T4meri/spark-cli">github.com/T4meri/spark-cli</a>.
@@ -193,8 +210,8 @@ model: spark-1.4</code></pre>
     </footer>
   </main>
 
-  <script src="config.js?v=c897ed9"></script>
-  <script src="api.js?v=c897ed9"></script>
-  <script src="docs.js?v=c897ed9"></script>
+  <script src="config.js?v=a21f8e6"></script>
+  <script src="api.js?v=a21f8e6"></script>
+  <script src="docs.js?v=a21f8e6"></script>
 </body>
 </html>

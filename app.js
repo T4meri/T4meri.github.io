@@ -13,6 +13,8 @@ const accountBadge = document.getElementById('account-badge');
 const sidebar = document.getElementById('sidebar');
 const scrim = document.getElementById('scrim');
 const sendIcon = document.getElementById('send-icon');
+const fileInput = document.getElementById('file-input');
+const attachRow = document.getElementById('attachments');
 const stopDialog = document.getElementById('stop-dialog');
 
 const STARTERS = [
@@ -27,8 +29,13 @@ const prefs = {
   get sendOnEnter() { return localStorage.getItem('spark.sendOnEnter') !== 'false'; }
 };
 
+const LIMITS = { maxFiles: 10, maxImageBytes: 5 * 1024 * 1024, maxTextFileBytes: 128 * 1024 };
+
+const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/x-icon', 'image/vnd.microsoft.icon'];
+
 const state = {
   user: null,
+  attachments: [],
   conversationId: null,
   conversations: [],
   streaming: false,
@@ -157,6 +164,129 @@ function addErrorTurn(message) {
   turn.append(avatar, column);
   thread.appendChild(turn);
   scrollToBottom();
+}
+
+function humanSize(bytes) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+  return `${(bytes / 1048576).toFixed(1)} MB`;
+}
+
+function renderAttachments() {
+  attachRow.replaceChildren();
+  attachRow.hidden = state.attachments.length === 0;
+
+  state.attachments.forEach((file, index) => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+
+    const label = document.createElement('span');
+    label.className = 'chip-name';
+    label.textContent = file.name;
+    label.title = `${file.name} · ${humanSize(file.bytes)}`;
+
+    const size = document.createElement('span');
+    size.className = 'chip-size';
+    size.textContent = humanSize(file.bytes);
+
+    const remove = document.createElement('button');
+    remove.className = 'chip-remove';
+    remove.type = 'button';
+    remove.textContent = '×';
+    remove.title = `Remove ${file.name}`;
+    remove.addEventListener('click', () => {
+      state.attachments.splice(index, 1);
+      renderAttachments();
+      syncSendState();
+    });
+
+    if (file.kind === 'image') {
+      const thumb = document.createElement('img');
+      thumb.className = 'chip-thumb';
+      thumb.src = file.data;
+      thumb.alt = '';
+      chip.appendChild(thumb);
+    }
+
+    chip.append(label, size, remove);
+    attachRow.appendChild(chip);
+  });
+}
+
+function readAsText(file) {
+  return file.text();
+}
+
+function readAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error(`Could not read ${file.name}`));
+    reader.readAsDataURL(file);
+  });
+}
+
+function pixelCount(dataUrl) {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve(image.naturalWidth * image.naturalHeight);
+    image.onerror = () => resolve(0);
+    image.src = dataUrl;
+  });
+}
+
+async function acceptFiles(list) {
+  const incoming = [...list];
+  if (incoming.length === 0) return;
+
+  const room = LIMITS.maxFiles - state.attachments.length;
+  if (room <= 0) {
+    addErrorTurn(`You can attach at most ${LIMITS.maxFiles} files to one message.`);
+    return;
+  }
+
+  const problems = [];
+
+  for (const file of incoming.slice(0, room)) {
+    const isImage = IMAGE_TYPES.includes(file.type);
+
+    if (isImage) {
+      if (file.size > LIMITS.maxImageBytes) {
+        problems.push(`${file.name} is over the ${humanSize(LIMITS.maxImageBytes)} image limit`);
+        continue;
+      }
+
+      const data = await readAsDataUrl(file);
+      if ((await pixelCount(data)) < 512) {
+        problems.push(`${file.name} is too small to read, images need at least 512 pixels`);
+        continue;
+      }
+
+      state.attachments.push({ kind: 'image', name: file.name, type: file.type, data, bytes: file.size });
+      continue;
+    }
+
+    if (file.size > LIMITS.maxTextFileBytes) {
+      problems.push(`${file.name} is over the ${humanSize(LIMITS.maxTextFileBytes)} text limit`);
+      continue;
+    }
+
+    const text = await readAsText(file);
+    if (/ /.test(text)) {
+      problems.push(`${file.name} looks binary, only images and text files work`);
+      continue;
+    }
+
+    state.attachments.push({ kind: 'text', name: file.name, type: file.type || 'text/plain', data: text, bytes: file.size });
+  }
+
+  if (incoming.length > room) {
+    problems.push(`only the first ${room} of ${incoming.length} files were added, the limit is ${LIMITS.maxFiles}`);
+  }
+
+  renderAttachments();
+  syncSendState();
+  if (problems.length) addErrorTurn(`Some files were skipped: ${problems.join('; ')}.`);
 }
 
 function setThinking(bubble, label) {
@@ -295,15 +425,20 @@ function startNewChat() {
 
 async function send(explicitText) {
   const message = String(explicitText ?? composer.value).trim();
-  if (!message || state.streaming) return;
+  const attachments = explicitText === undefined ? state.attachments : [];
+  if ((!message && attachments.length === 0) || state.streaming) return;
 
   state.streaming = true;
   state.controller = new AbortController();
-  if (explicitText === undefined) composer.value = '';
+  if (explicitText === undefined) {
+    composer.value = '';
+    state.attachments = [];
+    renderAttachments();
+  }
   resizeComposer();
   syncSendState();
 
-  addTurn('user', message);
+  addTurn('user', message || attachments.map((file) => file.name).join(', '));
   const bubble = addTurn('assistant', '');
   setThinking(bubble, 'Thinking');
 
@@ -313,6 +448,7 @@ async function send(explicitText) {
   try {
     await api.streamChat({
       message,
+      attachments,
       conversationId: state.conversationId,
       signal: state.controller.signal,
       onStart(data) {
@@ -388,7 +524,7 @@ function resizeComposer() {
 function syncSendState() {
   const stopping = state.streaming;
 
-  sendButton.disabled = !stopping && composer.value.trim().length === 0;
+  sendButton.disabled = !stopping && composer.value.trim().length === 0 && state.attachments.length === 0;
   sendButton.classList.toggle('stopping', stopping);
   sendButton.setAttribute('aria-label', stopping ? 'Stop generating' : 'Send message');
   sendIcon.firstElementChild.setAttribute('href', stopping ? '#i-stop' : '#i-send');
@@ -448,6 +584,21 @@ on('open-sidebar', 'click', openSidebar);
 on('close-sidebar', 'click', closeSidebar);
 scrim.addEventListener('click', closeSidebar);
 
+on('attach', 'click', () => fileInput.click());
+
+fileInput.addEventListener('change', async () => {
+  await acceptFiles(fileInput.files);
+  fileInput.value = '';
+});
+
+composer.addEventListener('paste', (event) => {
+  const files = [...(event.clipboardData?.files ?? [])];
+  if (files.length) {
+    event.preventDefault();
+    acceptFiles(files);
+  }
+});
+
 on('logout', 'click', async () => {
   await api.logout().catch(() => {});
   location.href = 'index.html';
@@ -472,6 +623,13 @@ on('logout', 'click', async () => {
   accountMeta.textContent = session.user.email;
   accountBadge.textContent = initialsOf(session.user);
   setQuota(session.remaining);
+
+  const settings = await api.settings().catch(() => null);
+  if (settings) {
+    LIMITS.maxFiles = settings.maxFilesPerMessage ?? LIMITS.maxFiles;
+    LIMITS.maxImageBytes = settings.maxImageBytes ?? LIMITS.maxImageBytes;
+    LIMITS.maxTextFileBytes = settings.maxTextFileBytes ?? LIMITS.maxTextFileBytes;
+  }
 
   renderEmptyState();
   resizeComposer();

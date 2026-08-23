@@ -42,6 +42,10 @@
       <symbol id="i-stop" viewBox="0 0 24 24">
         <rect x="7" y="7" width="10" height="10" fill="currentColor"/>
       </symbol>
+      <symbol id="i-clip" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+              d="M20 11.5 12.3 19.2a4.6 4.6 0 0 1-6.5-6.5l7.9-7.9a3 3 0 0 1 4.3 4.3l-7.9 7.9a1.5 1.5 0 0 1-2.1-2.1l7.2-7.2"/>
+      </symbol>
       <symbol id="i-play" viewBox="0 0 24 24">
         <path fill="currentColor" d="M7 4l12 8-12 8z"/>
       </symbol>
@@ -109,7 +113,13 @@
       <section class="thread scroll" id="thread"></section>
 
       <div class="composer-wrap">
+        <div class="attachments" id="attachments" hidden></div>
         <div class="composer">
+          <input type="file" id="file-input" multiple hidden
+                 accept="image/png,image/jpeg,image/webp,image/x-icon,text/*,.js,.mjs,.ts,.tsx,.jsx,.py,.rb,.go,.rs,.java,.kt,.c,.h,.cpp,.hpp,.cs,.php,.swift,.sh,.ps1,.sql,.html,.css,.scss,.json,.yml,.yaml,.toml,.xml,.md,.csv,.lua,.dart">
+          <button class="attach" id="attach" type="button" title="Attach files" aria-label="Attach files">
+            <svg width="16" height="16"><use href="#i-clip"/></svg>
+          </button>
           <textarea id="composer" rows="1" placeholder="Message Spark…" autocomplete="off"></textarea>
           <button id="send" class="send" aria-label="Send message">
             <svg width="17" height="17" id="send-icon"><use href="#i-send"/></svg>

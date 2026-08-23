@@ -7,9 +7,9 @@
   <meta name="description" content="Use Spark from the terminal or any OpenAI-compatible client.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c23b3b' d='M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap">
-  <link rel="stylesheet" href="styles.css?v=d86ac10">
-  <link rel="stylesheet" href="theme.css?v=d86ac10">
-  <link rel="stylesheet" href="docs.css?v=d86ac10">
+  <link rel="stylesheet" href="styles.css?v=c897ed9">
+  <link rel="stylesheet" href="theme.css?v=c897ed9">
+  <link rel="stylesheet" href="docs.css?v=c897ed9">
 </head>
 <body class="docs-body">
   <header class="settings-top">
@@ -35,7 +35,8 @@
       <a href="#endpoint">Endpoint</a>
       <a href="#curl">curl</a>
       <a href="#python">Python</a>
-      <a href="#clis">CLI tools</a>
+      <a href="#spark-cli">Spark CLI</a>
+      <a href="#clis">Other CLIs</a>
       <a href="#limits">Limits</a>
     </nav>
 
@@ -65,7 +66,7 @@
         <tr><th>Auth</th><td><code>Authorization: Bearer sk-spark-…</code></td></tr>
         <tr><th>Model</th><td><code>spark-1.4</code></td></tr>
       </table>
-      <p>Two endpoints exist:</p>
+      <p>Three endpoints exist:</p>
       <ul>
         <li><code>GET /v1/models</code> — list the models your key can use.</li>
         <li><code>POST /v1/chat/completions</code> — chat, with or without streaming.</li>
@@ -110,8 +111,47 @@ for chunk in stream:
     print(chunk.choices[0].delta.content or "", end="", flush=True)</code></pre>
     </section>
 
+    <section id="spark-cli">
+      <h2>Spark CLI</h2>
+      <p>
+        There is a purpose-built terminal client. It draws charts where you are reading rather
+        than describing them, opens generated pages in your browser, and puts suggested shell
+        commands into your history so you press Up and decide for yourself.
+      </p>
+
+      <h3>Windows</h3>
+      <pre><code>irm https://t4meri.github.io/install.ps1 | iex</code></pre>
+      <p>
+        That installs to <code>%LOCALAPPDATA%\Programs\spark-cli</code>, puts a <code>spark</code>
+        command on your PATH, and needs Node 20 or newer. Open a new terminal afterwards so the
+        PATH change is picked up. <code>-Uninstall</code> reverses it.
+      </p>
+      <p class="callout">
+        Piping a script from the internet straight into your shell runs whatever is at that URL.
+        The script is short and readable: open
+        <a href="https://github.com/T4meri/spark-cli/blob/main/install.ps1">install.ps1</a>
+        first if you would rather see it before running it. Spark CLI itself warns about this
+        pattern when a model suggests it.
+      </p>
+
+      <h3>macOS, Linux, or anywhere with npm</h3>
+      <pre><code>npm install -g github:T4meri/spark-cli</code></pre>
+
+      <h3>Then</h3>
+      <pre><code>spark login
+spark chart "days in each month of 2026"
+spark "explain this stack trace" &lt; error.log
+spark do "find files over 100MB" --to-history</code></pre>
+
+      <p>
+        Source and full documentation:
+        <a href="https://github.com/T4meri/spark-cli">github.com/T4meri/spark-cli</a>.
+        It has no runtime dependencies.
+      </p>
+    </section>
+
     <section id="clis">
-      <h2>CLI tools</h2>
+      <h2>Other CLI tools</h2>
       <p>Anything that accepts a custom base URL will work. Two common shapes:</p>
 
       <h3>Environment variables</h3>
@@ -153,8 +193,8 @@ model: spark-1.4</code></pre>
     </footer>
   </main>
 
-  <script src="config.js?v=d86ac10"></script>
-  <script src="api.js?v=d86ac10"></script>
-  <script src="docs.js?v=d86ac10"></script>
+  <script src="config.js?v=c897ed9"></script>
+  <script src="api.js?v=c897ed9"></script>
+  <script src="docs.js?v=c897ed9"></script>
 </body>
 </html>

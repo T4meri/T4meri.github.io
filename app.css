@@ -559,7 +559,7 @@
 .starter:hover::after { opacity: 1; transform: translateY(-50%) translateX(0); }
 
 .composer-wrap {
-  padding: 6px 20px 14px;
+  padding: 4px 20px 12px;
   background: linear-gradient(to top, var(--bg-base) 62%, transparent);
 }
 
@@ -572,7 +572,7 @@
   gap: 6px;
   background: var(--bg-panel);
   border: 1px solid var(--line-strong);
-  padding: 5px 5px 5px 12px;
+  padding: 3px 3px 3px 11px;
   transition: border-color 0.14s ease, box-shadow 0.14s ease;
 }
 
@@ -584,7 +584,7 @@
 .composer textarea {
   flex: 1;
   min-width: 0;
-  min-height: 34px;
+  min-height: 28px;
   max-height: 200px;
   background: none;
   border: none;
@@ -593,8 +593,8 @@
   color: var(--ink);
   font-family: inherit;
   font-size: 0.92rem;
-  line-height: 22px;
-  padding: 6px 0;
+  line-height: 20px;
+  padding: 4px 0;
   display: block;
 }
 
@@ -604,8 +604,8 @@
   flex: none;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   background: var(--brand);
   color: #fff;
   border: none;
@@ -954,4 +954,21 @@ kbd {
 .solid-btn:hover {
   background: var(--brand-hot);
   border-color: var(--brand-hot);
+}
+
+.thinking {
+  display: inline-block;
+  color: var(--ink-dim);
+  font-size: 0.92rem;
+  opacity: 0.45;
+  animation: breathe 1.5s ease-in-out infinite;
+}
+
+.thinking::after {
+  content: '…';
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
 }

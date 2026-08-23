@@ -159,6 +159,17 @@ function addErrorTurn(message) {
   scrollToBottom();
 }
 
+function setThinking(bubble, label) {
+  bubble.classList.remove('cursor');
+  bubble.innerHTML = '';
+
+  const note = document.createElement('span');
+  note.className = 'thinking';
+  note.textContent = label;
+  bubble.appendChild(note);
+  scrollToBottom();
+}
+
 function scrollToBottom() {
   thread.scrollTop = thread.scrollHeight;
 }
@@ -293,7 +304,8 @@ async function send(explicitText) {
   syncSendState();
 
   addTurn('user', message);
-  const bubble = addTurn('assistant', '', { streaming: true });
+  const bubble = addTurn('assistant', '');
+  setThinking(bubble, 'Thinking');
 
   let answer = '';
   let pinned = true;
@@ -306,6 +318,9 @@ async function send(explicitText) {
       onStart(data) {
         state.conversationId = data.conversationId;
         if (data.title) chatTitle.textContent = data.title;
+      },
+      onStatus(status) {
+        if (!answer) setThinking(bubble, status.kind === 'search' ? 'Searching the web' : 'Thinking');
       },
       onDelta(text) {
         answer += text;
@@ -367,7 +382,7 @@ function confirmStop() {
 
 function resizeComposer() {
   composer.style.height = 'auto';
-  composer.style.height = `${Math.max(34, Math.min(composer.scrollHeight, 200))}px`;
+  composer.style.height = `${Math.max(28, Math.min(composer.scrollHeight, 200))}px`;
 }
 
 function syncSendState() {

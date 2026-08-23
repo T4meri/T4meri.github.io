@@ -39,6 +39,9 @@
         <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"
               d="M4 10V4h6M20 14v6h-6"/>
       </symbol>
+      <symbol id="i-stop" viewBox="0 0 24 24">
+        <rect x="7" y="7" width="10" height="10" fill="currentColor"/>
+      </symbol>
       <symbol id="i-play" viewBox="0 0 24 24">
         <path fill="currentColor" d="M7 4l12 8-12 8z"/>
       </symbol>
@@ -104,7 +107,7 @@
         <div class="composer">
           <textarea id="composer" rows="1" placeholder="Message Spark…" autocomplete="off"></textarea>
           <button id="send" class="send" aria-label="Send message">
-            <svg width="17" height="17"><use href="#i-send"/></svg>
+            <svg width="17" height="17" id="send-icon"><use href="#i-send"/></svg>
           </button>
         </div>
       </div>
@@ -145,6 +148,15 @@
       </footer>
     </aside>
   </div>
+
+  <dialog class="confirm" id="stop-dialog">
+    <h2>Stop generating?</h2>
+    <p>Spark is still writing. Whatever it has written so far will be kept in the conversation.</p>
+    <div class="confirm-actions">
+      <button class="ghost-btn" id="stop-cancel" type="button" autofocus>Keep going</button>
+      <button class="solid-btn" id="stop-confirm" type="button">Stop</button>
+    </div>
+  </dialog>
 
   <script src="config.js"></script>
   <script src="api.js"></script>

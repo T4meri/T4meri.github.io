@@ -12,6 +12,8 @@ const accountMeta = document.getElementById('account-meta');
 const accountBadge = document.getElementById('account-badge');
 const sidebar = document.getElementById('sidebar');
 const scrim = document.getElementById('scrim');
+const sendIcon = document.getElementById('send-icon');
+const stopDialog = document.getElementById('stop-dialog');
 
 const STARTERS = [
   'Explain the difference between a mutex and a semaphore',
@@ -29,7 +31,8 @@ const state = {
   user: null,
   conversationId: null,
   conversations: [],
-  streaming: false
+  streaming: false,
+  controller: null
 };
 
 function icon(id, size) {
@@ -281,6 +284,7 @@ async function send(explicitText) {
   if (!message || state.streaming) return;
 
   state.streaming = true;
+  state.controller = new AbortController();
   if (explicitText === undefined) composer.value = '';
   resizeComposer();
   syncSendState();
@@ -295,6 +299,7 @@ async function send(explicitText) {
     await api.streamChat({
       message,
       conversationId: state.conversationId,
+      signal: state.controller.signal,
       onStart(data) {
         state.conversationId = data.conversationId;
         if (data.title) chatTitle.textContent = data.title;
@@ -322,6 +327,10 @@ async function send(explicitText) {
       addErrorTurn('Spark returned an empty response. Try rephrasing that.');
     }
   } catch (error) {
+    if (error.name === 'AbortError') {
+      if (!answer.trim()) bubble.closest('.turn')?.remove();
+      return;
+    }
     if (!answer.trim()) bubble.closest('.turn')?.remove();
     if (error.status === 401) {
       location.href = 'login.html?next=app.html';
@@ -335,10 +344,22 @@ async function send(explicitText) {
   } finally {
     bubble.classList.remove('cursor');
     state.streaming = false;
+    state.controller = null;
+    if (stopDialog.open) stopDialog.close();
     syncSendState();
     composer.focus();
     await refreshConversations();
   }
+}
+
+function requestStop() {
+  if (!state.streaming) return;
+  stopDialog.showModal();
+}
+
+function confirmStop() {
+  stopDialog.close();
+  state.controller?.abort();
 }
 
 function resizeComposer() {
@@ -347,7 +368,12 @@ function resizeComposer() {
 }
 
 function syncSendState() {
-  sendButton.disabled = state.streaming || composer.value.trim().length === 0;
+  const stopping = state.streaming;
+
+  sendButton.disabled = !stopping && composer.value.trim().length === 0;
+  sendButton.classList.toggle('stopping', stopping);
+  sendButton.setAttribute('aria-label', stopping ? 'Stop generating' : 'Send message');
+  sendIcon.firstElementChild.setAttribute('href', stopping ? '#i-stop' : '#i-send');
 }
 
 function wireStarters() {
@@ -390,7 +416,9 @@ window.SparkPreview.onFixRequest((message) => {
   send(message);
 });
 
-sendButton.addEventListener('click', () => send());
+sendButton.addEventListener('click', () => (state.streaming ? requestStop() : send()));
+document.getElementById('stop-confirm').addEventListener('click', confirmStop);
+document.getElementById('stop-cancel').addEventListener('click', () => stopDialog.close());
 document.getElementById('new-chat').addEventListener('click', startNewChat);
 document.getElementById('open-sidebar').addEventListener('click', openSidebar);
 document.getElementById('close-sidebar').addEventListener('click', closeSidebar);

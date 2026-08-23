@@ -73,10 +73,11 @@ window.SparkApi = {
   conversation: (id) => request(`/api/conversations/${id}`),
   deleteConversation: (id) => request(`/api/conversations/${id}`, { method: 'DELETE' }),
 
-  async streamChat({ message, conversationId, onStart, onDelta, onDone, onError }) {
+  async streamChat({ message, conversationId, signal, onStart, onDelta, onDone, onError }) {
     const response = await fetch(url('/api/chat'), {
       method: 'POST',
       credentials: 'include',
+      signal,
       headers: authHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ message, conversationId })
     });

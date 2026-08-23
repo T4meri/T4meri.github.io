@@ -6,10 +6,10 @@
   <title>Settings — Spark</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c23b3b' d='M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap">
-  <link rel="stylesheet" href="styles.css?v=e5d51a8">
-  <link rel="stylesheet" href="theme.css?v=e5d51a8">
-  <link rel="stylesheet" href="auth.css?v=e5d51a8">
-  <link rel="stylesheet" href="settings.css?v=e5d51a8">
+  <link rel="stylesheet" href="styles.css?v=966c09a">
+  <link rel="stylesheet" href="theme.css?v=966c09a">
+  <link rel="stylesheet" href="auth.css?v=966c09a">
+  <link rel="stylesheet" href="settings.css?v=966c09a">
 </head>
 <body class="settings-body">
   <header class="settings-top">
@@ -69,6 +69,30 @@
     </section>
 
     <section class="panel">
+      <h2>API keys</h2>
+      <p class="panel-lead">
+        Use Spark from a terminal or any OpenAI-compatible client.
+        <a href="docs.html">Read the docs</a> for setup.
+      </p>
+
+      <div class="fresh-key" id="fresh-key" hidden>
+        <strong>Copy this key now. It will not be shown again.</strong>
+        <div class="fresh-key-row">
+          <code id="fresh-key-value"></code>
+          <button class="submit compact" type="button" id="copy-key">Copy</button>
+        </div>
+      </div>
+
+      <div class="keys" id="keys"></div>
+
+      <form id="key-form" class="key-form">
+        <input type="text" id="key-name" maxlength="60" placeholder="Key name, for example laptop CLI">
+        <button class="submit compact" type="submit" id="key-create">Create key</button>
+      </form>
+      <p class="hint" id="key-count"></p>
+    </section>
+
+    <section class="panel">
       <h2>Password</h2>
       <form id="password-form">
         <div class="field">
@@ -105,8 +129,8 @@
     </section>
   </main>
 
-  <script src="config.js?v=e5d51a8"></script>
-  <script src="api.js?v=e5d51a8"></script>
-  <script src="settings.js?v=e5d51a8"></script>
+  <script src="config.js?v=966c09a"></script>
+  <script src="api.js?v=966c09a"></script>
+  <script src="settings.js?v=966c09a"></script>
 </body>
 </html>

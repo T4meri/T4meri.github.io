@@ -111,6 +111,98 @@ armConfirm(document.getElementById('delete-account'), 'Delete account', async ()
   location.href = 'index.html';
 });
 
+const keysBox = document.getElementById('keys');
+const keyCount = document.getElementById('key-count');
+const freshKey = document.getElementById('fresh-key');
+const freshKeyValue = document.getElementById('fresh-key-value');
+
+function whenText(timestamp) {
+  if (!timestamp) return 'never used';
+  const days = Math.floor((Date.now() - timestamp) / 86400000);
+  if (days === 0) return 'used today';
+  if (days === 1) return 'used yesterday';
+  return `used ${days} days ago`;
+}
+
+async function loadKeys() {
+  let payload;
+  try {
+    payload = await api.request('/api/keys');
+  } catch (error) {
+    keysBox.textContent = error.message;
+    return;
+  }
+
+  keysBox.replaceChildren();
+
+  if (payload.keys.length === 0) {
+    const empty = document.createElement('p');
+    empty.className = 'keys-empty';
+    empty.textContent = 'No keys yet. Create one to use Spark outside the browser.';
+    keysBox.appendChild(empty);
+  }
+
+  for (const key of payload.keys) {
+    const row = document.createElement('div');
+    row.className = 'key-row';
+
+    const meta = document.createElement('div');
+    meta.className = 'key-meta';
+
+    const name = document.createElement('div');
+    name.className = 'key-name';
+    name.textContent = key.name;
+
+    const sub = document.createElement('div');
+    sub.className = 'key-sub';
+    sub.textContent = `${key.hint} · ${whenText(key.lastUsedAt)}`;
+
+    meta.append(name, sub);
+
+    const remove = document.createElement('button');
+    remove.className = 'danger-btn';
+    remove.type = 'button';
+    remove.textContent = 'Delete';
+    armConfirm(remove, 'Delete', async () => {
+      await api.request(`/api/keys/${key.id}`, { method: 'DELETE' });
+      flash(success, `Deleted "${key.name}".`);
+      await loadKeys();
+    });
+
+    row.append(meta, remove);
+    keysBox.appendChild(row);
+  }
+
+  keyCount.textContent = `${payload.keys.length} of ${payload.max} keys used.`;
+  document.getElementById('key-create').disabled = payload.keys.length >= payload.max;
+}
+
+document.getElementById('key-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const button = document.getElementById('key-create');
+  const nameInput = document.getElementById('key-name');
+
+  button.disabled = true;
+  try {
+    const result = await api.request('/api/keys', { method: 'POST', body: { name: nameInput.value } });
+    nameInput.value = '';
+    freshKeyValue.textContent = result.key;
+    freshKey.hidden = false;
+    flash(success, 'Key created. Copy it now, it will not be shown again.');
+    await loadKeys();
+  } catch (error) {
+    flash(notice, error.message);
+    button.disabled = false;
+  }
+});
+
+document.getElementById('copy-key').addEventListener('click', async () => {
+  const button = document.getElementById('copy-key');
+  await navigator.clipboard.writeText(freshKeyValue.textContent).catch(() => {});
+  button.textContent = 'Copied';
+  setTimeout(() => { button.textContent = 'Copy'; }, 1500);
+});
+
 bindFlag(autoRun, 'spark.autoRun');
 bindFlag(sendOnEnter, 'spark.sendOnEnter');
 
@@ -143,6 +235,8 @@ bindFlag(sendOnEnter, 'spark.sendOnEnter');
     month: 'long',
     day: 'numeric'
   });
+
+  await loadKeys();
 
   const limit = settings.maxMessagesPerDay;
   const remaining = session.remaining;

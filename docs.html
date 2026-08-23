@@ -7,9 +7,9 @@
   <meta name="description" content="Use Spark from the terminal or any OpenAI-compatible client.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c23b3b' d='M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap">
-  <link rel="stylesheet" href="styles.css?v=a21f8e6">
-  <link rel="stylesheet" href="theme.css?v=a21f8e6">
-  <link rel="stylesheet" href="docs.css?v=a21f8e6">
+  <link rel="stylesheet" href="styles.css?v=14eb333">
+  <link rel="stylesheet" href="theme.css?v=14eb333">
+  <link rel="stylesheet" href="docs.css?v=14eb333">
 </head>
 <body class="docs-body">
   <header class="settings-top">
@@ -150,14 +150,41 @@ spark do "find files over 100MB" --to-history</code></pre>
         highlighted one, Enter runs it, Esc puts the menu away.
       </p>
       <pre><code>&rsaquo; /s
-  &rsaquo; /skills           What Spark can do, with examples worth stealing
-    /save &lt;file&gt;      Keep this conversation in a file you own
-    /serve            Open the last generated page in a browser
-    /search [on|off]  Whether answers may use the live web</code></pre>
+  &rsaquo; /skills [new &lt;name&gt;]  Your own reusable briefs, listed or created
+    /save &lt;file&gt;          Keep this conversation in a file you own
+    /serve                Open the last generated page in a browser
+    /search [on|off]      Whether answers may use the live web</code></pre>
       <p>
-        <code>/skills</code> is the tour. Esc while an answer is streaming stops it and keeps
-        what had already arrived. Sessions are written to a thread file as you go, so
-        <code>/resume</code> offers the recent ones back.
+        Esc while an answer is streaming stops it and keeps what had already arrived. Sessions
+        are written to a thread file as you go, so <code>/resume</code> offers the recent ones
+        back.
+      </p>
+
+      <h3>Skills</h3>
+      <p>
+        A skill is the brief you are tired of retyping, kept in a file.
+        <code>spark skills new commit-message --project</code> writes
+        <code>.spark/skills/commit-message/SKILL.md</code> next to your code, where it can be
+        checked in and shared; without <code>--project</code> it goes in your account and
+        follows you everywhere.
+      </p>
+      <pre><code>---
+name: commit-message
+description: Turn a diff into a commit subject and body
+search: off
+files: [style.md]
+---
+
+Read the diff below the divider and write a commit message for it.
+
+1. Work out what changed and, more importantly, why.
+2. Subject line in the imperative mood, under 60 characters.</code></pre>
+      <p>
+        It is a command from then on: it appears in the <code>/</code> menu tagged
+        <code>skill</code>, and anything you type after it is appended below a divider. From a
+        shell it is <code>git diff | spark --skill commit-message</code>. <code>files:</code>
+        attaches other files from the skill folder as reference material, and anything outside
+        that folder is refused.
       </p>
 
       <p>
@@ -210,8 +237,8 @@ model: spark-1.4</code></pre>
     </footer>
   </main>
 
-  <script src="config.js?v=a21f8e6"></script>
-  <script src="api.js?v=a21f8e6"></script>
-  <script src="docs.js?v=a21f8e6"></script>
+  <script src="config.js?v=14eb333"></script>
+  <script src="api.js?v=14eb333"></script>
+  <script src="docs.js?v=14eb333"></script>
 </body>
 </html>

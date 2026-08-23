@@ -7,9 +7,9 @@
   <meta name="description" content="Use Spark from the terminal or any OpenAI-compatible client.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c23b3b' d='M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap">
-  <link rel="stylesheet" href="styles.css?v=d4ee685">
-  <link rel="stylesheet" href="theme.css?v=d4ee685">
-  <link rel="stylesheet" href="docs.css?v=d4ee685">
+  <link rel="stylesheet" href="styles.css?v=6050923">
+  <link rel="stylesheet" href="theme.css?v=6050923">
+  <link rel="stylesheet" href="docs.css?v=6050923">
 </head>
 <body class="docs-body">
   <header class="settings-top">
@@ -161,6 +161,24 @@ spark do "find files over 100MB" --to-history</code></pre>
         back.
       </p>
 
+      <h3>Files go both ways</h3>
+      <p>
+        Attach a file with <code>@path</code> or pipe one in, and Spark can hand files back:
+        when an answer is a file it carries its path on the fence, and
+        <code>spark apply</code> writes them once you have seen the list.
+      </p>
+      <pre><code>spark "split this into a module and a test" @src/thing.js
+spark apply
+
+  &rsaquo; src/thing.js        overwrites 84 lines with 61
+  &rsaquo; test/thing.test.js  new, 39 lines
+
+Write 2, overwriting 1? [y/N]</code></pre>
+      <p>
+        A path that is absolute or climbs above the working directory is refused rather than
+        written.
+      </p>
+
       <h3>Skills</h3>
       <p>
         A skill is the brief you are tired of retyping, kept in a file.
@@ -238,8 +256,8 @@ model: spark-1.4</code></pre>
     </footer>
   </main>
 
-  <script src="config.js?v=d4ee685"></script>
-  <script src="api.js?v=d4ee685"></script>
-  <script src="docs.js?v=d4ee685"></script>
+  <script src="config.js?v=6050923"></script>
+  <script src="api.js?v=6050923"></script>
+  <script src="docs.js?v=6050923"></script>
 </body>
 </html>

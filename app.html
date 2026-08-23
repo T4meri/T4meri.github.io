@@ -6,9 +6,9 @@
   <title>Spark</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c23b3b' d='M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap">
-  <link rel="stylesheet" href="styles.css?v=c144962">
-  <link rel="stylesheet" href="theme.css?v=c144962">
-  <link rel="stylesheet" href="app.css?v=c144962">
+  <link rel="stylesheet" href="styles.css?v=44f6dc0">
+  <link rel="stylesheet" href="theme.css?v=44f6dc0">
+  <link rel="stylesheet" href="app.css?v=44f6dc0">
 </head>
 <body class="app-body">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -45,6 +45,11 @@
       <symbol id="i-clip" viewBox="0 0 24 24">
         <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" stroke-linejoin="miter"
               d="M13 3H5v18h14V9zM13 3v6h6M9 13h6M9 17h6"/>
+      </symbol>
+      <symbol id="i-image" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" stroke-linejoin="miter"
+              d="M3 4h18v16H3zM3 16l5-5 4 4 3-3 6 6"/>
+        <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
       </symbol>
       <symbol id="i-play" viewBox="0 0 24 24">
         <path fill="currentColor" d="M7 4l12 8-12 8z"/>
@@ -171,6 +176,16 @@
     </aside>
   </div>
 
+  <dialog class="viewer" id="viewer">
+    <header class="viewer-bar">
+      <span class="viewer-title" id="viewer-title"></span>
+      <button class="icon-btn" id="viewer-close" type="button" aria-label="Close">
+        <svg width="15" height="15"><use href="#i-close"/></svg>
+      </button>
+    </header>
+    <div class="viewer-body" id="viewer-body"></div>
+  </dialog>
+
   <dialog class="confirm" id="stop-dialog">
     <h2>Stop generating?</h2>
     <p>Spark is still writing. Whatever it has written so far will be kept in the conversation.</p>
@@ -180,11 +195,11 @@
     </div>
   </dialog>
 
-  <script src="config.js?v=c144962"></script>
-  <script src="api.js?v=c144962"></script>
-  <script src="markdown.js?v=c144962"></script>
-  <script src="chart.js?v=c144962"></script>
-  <script src="preview.js?v=c144962"></script>
-  <script src="app.js?v=c144962"></script>
+  <script src="config.js?v=44f6dc0"></script>
+  <script src="api.js?v=44f6dc0"></script>
+  <script src="markdown.js?v=44f6dc0"></script>
+  <script src="chart.js?v=44f6dc0"></script>
+  <script src="preview.js?v=44f6dc0"></script>
+  <script src="app.js?v=44f6dc0"></script>
 </body>
 </html>

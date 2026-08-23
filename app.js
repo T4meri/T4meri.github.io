@@ -108,7 +108,83 @@ function autoRunLatest(bubble) {
   }
 }
 
-function addTurn(role, content, { streaming = false } = {}) {
+async function openAttachment(file) {
+  const dialog = document.getElementById('viewer');
+  const title = document.getElementById('viewer-title');
+  const bodyBox = document.getElementById('viewer-body');
+
+  title.textContent = `${file.name} — ${humanSize(file.bytes)}`;
+  bodyBox.replaceChildren(Object.assign(document.createElement('p'), { className: 'viewer-note', textContent: 'Loading…' }));
+  dialog.showModal();
+
+  let payload;
+  try {
+    payload = await api.request(`/api/attachments/${file.id}`);
+  } catch (error) {
+    bodyBox.replaceChildren(Object.assign(document.createElement('p'), { className: 'viewer-note', textContent: error.message }));
+    return;
+  }
+
+  if (!payload.available) {
+    bodyBox.replaceChildren(
+      Object.assign(document.createElement('p'), {
+        className: 'viewer-note',
+        textContent: 'This file was too large to keep a copy of, so it can no longer be shown.'
+      })
+    );
+    return;
+  }
+
+  if (payload.kind === 'image') {
+    const image = document.createElement('img');
+    image.className = 'viewer-image';
+    image.src = payload.body;
+    image.alt = payload.name;
+    bodyBox.replaceChildren(image);
+    return;
+  }
+
+  const pre = document.createElement('pre');
+  pre.className = 'viewer-text scroll';
+  pre.textContent = payload.body;
+  bodyBox.replaceChildren(pre);
+}
+
+function attachmentCard(file) {
+  const card = document.createElement('button');
+  card.className = `attached attached-${file.kind}`;
+  card.type = 'button';
+  card.title = `${file.name} — ${humanSize(file.bytes)}`;
+
+  const glyph = document.createElement('span');
+  glyph.className = 'attached-icon';
+  glyph.innerHTML = icon(file.kind === 'image' ? 'i-image' : 'i-clip', 15);
+
+  const meta = document.createElement('span');
+  meta.className = 'attached-meta';
+
+  const name = document.createElement('span');
+  name.className = 'attached-name';
+  name.textContent = file.name;
+
+  const size = document.createElement('span');
+  size.className = 'attached-size';
+  size.textContent = humanSize(file.bytes);
+
+  meta.append(name, size);
+  card.append(glyph, meta);
+  card.addEventListener('click', () => openAttachment(file));
+  return card;
+}
+
+function renderMessageAttachments(files) {
+  const row = document.createElement('div');
+  row.className = 'attached-row';
+  for (const file of files) row.appendChild(attachmentCard(file));
+  return row;
+}
+
+function addTurn(role, content, { streaming = false, attachments = [] } = {}) {
   document.getElementById('empty-state')?.remove();
   thread.classList.remove('is-empty');
 
@@ -134,6 +210,7 @@ function addTurn(role, content, { streaming = false } = {}) {
   if (streaming) bubble.classList.add('cursor');
 
   column.append(byline, bubble);
+  if (attachments.length) column.appendChild(renderMessageAttachments(attachments));
   turn.append(avatar, column);
   thread.appendChild(turn);
   scrollToBottom();
@@ -219,6 +296,32 @@ function readAsText(file) {
   return file.text();
 }
 
+function downscale(dataUrl, maxEdge = 1280, quality = 0.72) {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => {
+      const scale = Math.min(1, maxEdge / Math.max(image.naturalWidth, image.naturalHeight));
+      if (scale === 1 && dataUrl.length < 400000) {
+        resolve(dataUrl);
+        return;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(image.naturalWidth * scale);
+      canvas.height = Math.round(image.naturalHeight * scale);
+      canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+
+      try {
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      } catch {
+        resolve(dataUrl);
+      }
+    };
+    image.onerror = () => resolve(dataUrl);
+    image.src = dataUrl;
+  });
+}
+
 function readAsDataUrl(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -264,7 +367,8 @@ async function acceptFiles(list) {
         continue;
       }
 
-      state.attachments.push({ kind: 'image', name: file.name, type: file.type, data, bytes: file.size });
+      const preview = await downscale(data);
+      state.attachments.push({ kind: 'image', name: file.name, type: file.type, data, preview, bytes: file.size });
       continue;
     }
 
@@ -406,7 +510,9 @@ async function openConversation(id) {
   thread.replaceChildren();
 
   for (const message of result.messages) {
-    const bubble = addTurn(message.role === 'user' ? 'user' : 'assistant', message.content);
+    const bubble = addTurn(message.role === 'user' ? 'user' : 'assistant', message.content, {
+      attachments: message.attachments ?? []
+    });
     if (message.role !== 'user') {
       enhanceCode(bubble);
       window.SparkChart.hydrate(bubble);
@@ -443,7 +549,10 @@ async function send(explicitText) {
   resizeComposer();
   syncSendState();
 
-  addTurn('user', message || attachments.map((file) => file.name).join(', '));
+  const pendingCards = attachments.map((file, index) => ({
+    id: `pending-${index}`, kind: file.kind, name: file.name, type: file.type, bytes: file.bytes
+  }));
+  addTurn('user', message, { attachments: pendingCards });
   const bubble = addTurn('assistant', '');
   setThinking(bubble, 'Thinking');
 
@@ -459,6 +568,13 @@ async function send(explicitText) {
       onStart(data) {
         state.conversationId = data.conversationId;
         if (data.title) chatTitle.textContent = data.title;
+
+        const cards = [...thread.querySelectorAll('.turn.user')].pop()?.querySelectorAll('.attached') ?? [];
+        (data.attachments ?? []).forEach((file, index) => {
+          const card = cards[index];
+          if (card) card.addEventListener('click', () => openAttachment(file), { once: false });
+        });
+        state.lastSentAttachments = data.attachments ?? [];
       },
       onStatus(status) {
         if (!answer) setThinking(bubble, status.kind === 'search' ? 'Searching the web' : 'Thinking');
@@ -583,6 +699,7 @@ function on(id, event, handler) {
 }
 
 sendButton.addEventListener('click', () => (state.streaming ? requestStop() : send()));
+on('viewer-close', 'click', () => document.getElementById('viewer').close());
 on('stop-confirm', 'click', confirmStop);
 on('stop-cancel', 'click', () => stopDialog.close());
 on('new-chat', 'click', startNewChat);

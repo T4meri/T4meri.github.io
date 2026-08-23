@@ -1105,3 +1105,124 @@ kbd {
 }
 
 .chart-failed { color: #eda5a5; }
+
+.attached-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.attached {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 260px;
+  padding: 7px 11px 7px 9px;
+  background: var(--bg-panel);
+  border: 1px solid var(--line-strong);
+  color: var(--ink-dim);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.13s ease, background 0.13s ease, color 0.13s ease;
+}
+
+.attached:hover {
+  border-color: #3d3d47;
+  background: var(--bg-raised);
+  color: var(--ink);
+}
+
+.attached-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--brand-hot);
+}
+
+.attached-icon svg { display: block; }
+
+.attached-meta {
+  display: grid;
+  min-width: 0;
+}
+
+.attached-name {
+  font-size: 0.8rem;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attached-size {
+  font-size: 10.5px;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.viewer {
+  padding: 0;
+  width: min(880px, calc(100vw - 48px));
+  max-width: none;
+  max-height: calc(100vh - 64px);
+  background: var(--bg-panel);
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+}
+
+.viewer::backdrop {
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+.viewer-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px 10px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-sidebar);
+}
+
+.viewer-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viewer-body {
+  max-height: calc(100vh - 140px);
+  overflow: auto;
+  background: #0d0d10;
+}
+
+.viewer-image {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.viewer-text {
+  margin: 0;
+  padding: 14px 16px;
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: #cfd3d8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.viewer-note {
+  margin: 0;
+  padding: 26px 16px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+}

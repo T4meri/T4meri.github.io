@@ -7,9 +7,9 @@
   <meta name="description" content="Use Spark from the terminal or any OpenAI-compatible client.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c23b3b' d='M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap">
-  <link rel="stylesheet" href="styles.css?v=7ae03a7">
-  <link rel="stylesheet" href="theme.css?v=7ae03a7">
-  <link rel="stylesheet" href="docs.css?v=7ae03a7">
+  <link rel="stylesheet" href="styles.css?v=d86ac10">
+  <link rel="stylesheet" href="theme.css?v=d86ac10">
+  <link rel="stylesheet" href="docs.css?v=d86ac10">
 </head>
 <body class="docs-body">
   <header class="settings-top">
@@ -69,6 +69,7 @@
       <ul>
         <li><code>GET /v1/models</code> — list the models your key can use.</li>
         <li><code>POST /v1/chat/completions</code> — chat, with or without streaming.</li>
+        <li><code>GET /v1/quota</code> — how many messages you have left today.</li>
       </ul>
       <p>
         Many tools expect an environment variable named for a different vendor. That is fine.
@@ -137,7 +138,7 @@ model: spark-1.4</code></pre>
     <section id="limits">
       <h2>Limits and behaviour</h2>
       <ul>
-        <li>API requests draw on the same daily message allowance as the web app.</li>
+        <li>API requests draw on the same daily message allowance as the web app. Check it with <code>GET /v1/quota</code>, or read the <code>X-Spark-Quota-Remaining</code> header returned with every completion.</li>
         <li>Five keys per account. Delete one to make room for another.</li>
         <li>Web search is on by default, so answers can reflect current information. Send <code>"web_search": false</code> to turn it off for a request.</li>
         <li>Sampling parameters such as temperature are accepted and ignored. Responses are tuned centrally.</li>
@@ -152,8 +153,8 @@ model: spark-1.4</code></pre>
     </footer>
   </main>
 
-  <script src="config.js?v=7ae03a7"></script>
-  <script src="api.js?v=7ae03a7"></script>
-  <script src="docs.js?v=7ae03a7"></script>
+  <script src="config.js?v=d86ac10"></script>
+  <script src="api.js?v=d86ac10"></script>
+  <script src="docs.js?v=d86ac10"></script>
 </body>
 </html>

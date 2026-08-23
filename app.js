@@ -243,7 +243,10 @@ function setQuota(remaining) {
 }
 
 async function refreshConversations() {
-  const result = await api.conversations().catch(() => ({ conversations: [] }));
+  const result = await api.conversations().catch((error) => {
+    console.error('could not load conversations:', error.message);
+    return { conversations: [] };
+  });
   state.conversations = result.conversations;
   renderConversations();
 }
@@ -364,7 +367,7 @@ function confirmStop() {
 
 function resizeComposer() {
   composer.style.height = 'auto';
-  composer.style.height = `${Math.min(composer.scrollHeight, 200)}px`;
+  composer.style.height = `${Math.max(34, Math.min(composer.scrollHeight, 200))}px`;
 }
 
 function syncSendState() {
@@ -416,15 +419,21 @@ window.SparkPreview.onFixRequest((message) => {
   send(message);
 });
 
+function on(id, event, handler) {
+  const element = document.getElementById(id);
+  if (element) element.addEventListener(event, handler);
+  else console.warn(`missing element: #${id}`);
+}
+
 sendButton.addEventListener('click', () => (state.streaming ? requestStop() : send()));
-document.getElementById('stop-confirm').addEventListener('click', confirmStop);
-document.getElementById('stop-cancel').addEventListener('click', () => stopDialog.close());
-document.getElementById('new-chat').addEventListener('click', startNewChat);
-document.getElementById('open-sidebar').addEventListener('click', openSidebar);
-document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
+on('stop-confirm', 'click', confirmStop);
+on('stop-cancel', 'click', () => stopDialog.close());
+on('new-chat', 'click', startNewChat);
+on('open-sidebar', 'click', openSidebar);
+on('close-sidebar', 'click', closeSidebar);
 scrim.addEventListener('click', closeSidebar);
 
-document.getElementById('logout').addEventListener('click', async () => {
+on('logout', 'click', async () => {
   await api.logout().catch(() => {});
   location.href = 'index.html';
 });

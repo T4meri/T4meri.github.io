@@ -253,27 +253,6 @@
   min-width: 0;
 }
 
-.dot {
-  position: relative;
-  width: 6px;
-  height: 6px;
-  flex: none;
-  background: #34d399;
-}
-
-.dot::after {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  background: rgba(52, 211, 153, 0.24);
-  animation: pulse 2.6s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.25; transform: scale(1.5); }
-}
-
 #chat-title {
   font-size: 0.87rem;
   font-weight: 500;
@@ -580,7 +559,7 @@
 .starter:hover::after { opacity: 1; transform: translateY(-50%) translateX(0); }
 
 .composer-wrap {
-  padding: 12px 20px 16px;
+  padding: 6px 20px 14px;
   background: linear-gradient(to top, var(--bg-base) 62%, transparent);
 }
 
@@ -590,10 +569,10 @@
   margin: 0 auto;
   display: flex;
   align-items: flex-end;
-  gap: 9px;
+  gap: 6px;
   background: var(--bg-panel);
   border: 1px solid var(--line-strong);
-  padding: 8px 8px 8px 15px;
+  padding: 5px 5px 5px 12px;
   transition: border-color 0.14s ease, box-shadow 0.14s ease;
 }
 
@@ -605,7 +584,7 @@
 .composer textarea {
   flex: 1;
   min-width: 0;
-  min-height: var(--control);
+  min-height: 34px;
   max-height: 200px;
   background: none;
   border: none;
@@ -613,9 +592,9 @@
   resize: none;
   color: var(--ink);
   font-family: inherit;
-  font-size: 0.93rem;
-  line-height: 24px;
-  padding: 8px 0;
+  font-size: 0.92rem;
+  line-height: 22px;
+  padding: 6px 0;
   display: block;
 }
 
@@ -625,8 +604,8 @@
   flex: none;
   display: grid;
   place-items: center;
-  width: var(--control);
-  height: var(--control);
+  width: 34px;
+  height: 34px;
   background: var(--brand);
   color: #fff;
   border: none;

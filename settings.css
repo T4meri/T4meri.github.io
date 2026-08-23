@@ -333,5 +333,11 @@
   outline: none;
 }
 
+.key-form .submit,
+.fresh-key-row .submit {
+  margin-top: 0;
+  flex: none;
+}
+
 .key-form input:focus { border-color: #45454f; }
 .key-form input::placeholder { color: #4d4d57; }

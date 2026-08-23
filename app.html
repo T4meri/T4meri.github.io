@@ -6,9 +6,9 @@
   <title>Spark</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c23b3b' d='M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap">
-  <link rel="stylesheet" href="styles.css?v=fd38239">
-  <link rel="stylesheet" href="theme.css?v=fd38239">
-  <link rel="stylesheet" href="app.css?v=fd38239">
+  <link rel="stylesheet" href="styles.css?v=5ae04e4">
+  <link rel="stylesheet" href="theme.css?v=5ae04e4">
+  <link rel="stylesheet" href="app.css?v=5ae04e4">
 </head>
 <body class="app-body">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -43,8 +43,8 @@
         <rect x="7" y="7" width="10" height="10" fill="currentColor"/>
       </symbol>
       <symbol id="i-clip" viewBox="0 0 24 24">
-        <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
-              d="M20 11.5 12.3 19.2a4.6 4.6 0 0 1-6.5-6.5l7.9-7.9a3 3 0 0 1 4.3 4.3l-7.9 7.9a1.5 1.5 0 0 1-2.1-2.1l7.2-7.2"/>
+        <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" stroke-linejoin="miter"
+              d="M13 3H5v18h14V9zM13 3v6h6M9 13h6M9 17h6"/>
       </symbol>
       <symbol id="i-play" viewBox="0 0 24 24">
         <path fill="currentColor" d="M7 4l12 8-12 8z"/>
@@ -99,6 +99,13 @@
     </aside>
 
     <main class="main">
+      <div class="dropzone" id="dropzone" hidden>
+        <div class="dropzone-inner">
+          <svg width="26" height="26"><use href="#i-clip"/></svg>
+          <strong>Drop files to attach</strong>
+          <span id="dropzone-hint">Images and text files, up to 10 per message</span>
+        </div>
+      </div>
       <header class="topbar">
         <button class="icon-btn rail-toggle" id="open-sidebar" aria-label="Open sidebar">
           <svg width="17" height="17"><use href="#i-menu"/></svg>
@@ -173,10 +180,10 @@
     </div>
   </dialog>
 
-  <script src="config.js?v=fd38239"></script>
-  <script src="api.js?v=fd38239"></script>
-  <script src="markdown.js?v=fd38239"></script>
-  <script src="preview.js?v=fd38239"></script>
-  <script src="app.js?v=fd38239"></script>
+  <script src="config.js?v=5ae04e4"></script>
+  <script src="api.js?v=5ae04e4"></script>
+  <script src="markdown.js?v=5ae04e4"></script>
+  <script src="preview.js?v=5ae04e4"></script>
+  <script src="app.js?v=5ae04e4"></script>
 </body>
 </html>

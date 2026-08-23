@@ -15,6 +15,8 @@ const scrim = document.getElementById('scrim');
 const sendIcon = document.getElementById('send-icon');
 const fileInput = document.getElementById('file-input');
 const attachRow = document.getElementById('attachments');
+const dropzone = document.getElementById('dropzone');
+const dropHint = document.getElementById('dropzone-hint');
 const stopDialog = document.getElementById('stop-dialog');
 
 const STARTERS = [
@@ -272,7 +274,7 @@ async function acceptFiles(list) {
     }
 
     const text = await readAsText(file);
-    if (/ /.test(text)) {
+    if (text.includes(String.fromCharCode(0))) {
       problems.push(`${file.name} looks binary, only images and text files work`);
       continue;
     }
@@ -585,6 +587,48 @@ on('close-sidebar', 'click', closeSidebar);
 scrim.addEventListener('click', closeSidebar);
 
 on('attach', 'click', () => fileInput.click());
+
+let dragDepth = 0;
+
+function carriesFiles(event) {
+  return [...(event.dataTransfer?.types ?? [])].includes('Files');
+}
+
+function showDropzone() {
+  dropHint.textContent = `Images and text files, up to ${LIMITS.maxFiles} per message`;
+  dropzone.hidden = false;
+}
+
+function hideDropzone() {
+  dragDepth = 0;
+  dropzone.hidden = true;
+}
+
+window.addEventListener('dragenter', (event) => {
+  if (!carriesFiles(event)) return;
+  event.preventDefault();
+  dragDepth += 1;
+  showDropzone();
+});
+
+window.addEventListener('dragover', (event) => {
+  if (!carriesFiles(event)) return;
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'copy';
+});
+
+window.addEventListener('dragleave', (event) => {
+  if (!carriesFiles(event)) return;
+  dragDepth -= 1;
+  if (dragDepth <= 0) hideDropzone();
+});
+
+window.addEventListener('drop', async (event) => {
+  if (!carriesFiles(event)) return;
+  event.preventDefault();
+  hideDropzone();
+  await acceptFiles(event.dataTransfer.files);
+});
 
 fileInput.addEventListener('change', async () => {
   await acceptFiles(fileInput.files);

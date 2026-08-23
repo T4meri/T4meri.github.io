@@ -1088,3 +1088,20 @@ kbd {
   font-size: 0.8rem;
   color: var(--ink-faint);
 }
+
+.chart-mount {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  background: #0d0d10;
+  border: 1px solid var(--line-strong);
+}
+
+.chart-mount svg { display: block; }
+
+.chart-pending,
+.chart-failed {
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+}
+
+.chart-failed { color: #eda5a5; }

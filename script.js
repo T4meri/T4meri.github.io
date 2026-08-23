@@ -80,6 +80,7 @@ async function sendMessage() {
       onDelta(piece) {
         answer += piece;
         bubble.innerHTML = markdown.render(answer);
+        window.SparkChart?.hydrate(bubble);
         chatMessages.scrollTop = chatMessages.scrollHeight;
       },
       onError(error) {

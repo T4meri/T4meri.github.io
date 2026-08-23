@@ -407,7 +407,10 @@ async function openConversation(id) {
 
   for (const message of result.messages) {
     const bubble = addTurn(message.role === 'user' ? 'user' : 'assistant', message.content);
-    if (message.role !== 'user') enhanceCode(bubble);
+    if (message.role !== 'user') {
+      enhanceCode(bubble);
+      window.SparkChart.hydrate(bubble);
+    }
   }
 
   renderConversations();
@@ -477,6 +480,7 @@ async function send(explicitText) {
 
     if (answer.trim()) {
       enhanceCode(bubble);
+      window.SparkChart.hydrate(bubble);
       autoRunLatest(bubble);
     } else {
       bubble.closest('.turn').remove();

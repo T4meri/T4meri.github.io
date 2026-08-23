@@ -84,8 +84,14 @@
       /```([\w+-]*)[^\S\n]*\n?([\s\S]*?)(?:```|$)/g,
       (_, lang, code) => {
         const index = blocks.length;
-        const attribute = ` data-lang="${escapeHtml(lang || 'code')}"`;
-        blocks.push(`<pre${attribute}><code>${escapeHtml(code.replace(/\n$/, ''))}</code></pre>`);
+        const body = code.replace(/\n$/, '');
+
+        if ((lang || '').toLowerCase() === 'chart') {
+          blocks.push(`<div class="chart-mount" data-chart="${escapeHtml(body)}"></div>`);
+        } else {
+          blocks.push(`<pre data-lang="${escapeHtml(lang || 'code')}"><code>${escapeHtml(body)}</code></pre>`);
+        }
+
         return `\n\n@@SPARKBLOCK${index}@@\n\n`;
       }
     );

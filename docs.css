@@ -72,22 +72,38 @@
 .toc {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  padding: 0 0 26px;
+  align-items: center;
+  gap: 0 18px;
+  padding: 0 0 22px;
   border-bottom: 1px solid var(--line);
   margin-bottom: 8px;
 }
 
-.toc a {
-  padding: 5px 10px;
-  font-size: 0.78rem;
+nav.toc a {
+  position: relative;
+  padding: 3px 0;
+  font-size: 0.82rem;
   color: var(--ink-dim);
   text-decoration: none;
-  background: var(--bg-panel);
-  border: 1px solid var(--line);
+  border-bottom: 1px solid transparent;
+  transition: color 0.12s ease, border-color 0.12s ease;
 }
 
-.toc a:hover { color: var(--ink); border-color: var(--line-strong); }
+nav.toc a:hover {
+  color: var(--ink);
+  border-bottom-color: var(--brand-hot);
+}
+
+nav.toc a + a::before {
+  content: '';
+  position: absolute;
+  left: -9px;
+  top: 50%;
+  width: 1px;
+  height: 11px;
+  transform: translateY(-50%);
+  background: var(--line-strong);
+}
 
 .docs section { padding-top: 28px; }
 
